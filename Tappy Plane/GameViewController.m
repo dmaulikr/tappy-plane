@@ -7,7 +7,7 @@
 //
 
 #import "GameViewController.h"
-#import "GameScene.h"
+#import "TPGameScene.h"
 
 @implementation GameViewController
 
@@ -23,7 +23,8 @@
     skView.ignoresSiblingOrder = YES;
     
     // Create and configure the scene.
-    GameScene *scene = [GameScene nodeWithFileNamed:@"GameScene"];
+    TPGameScene *scene = [TPGameScene sceneWithSize:skView.bounds.size];
+    //TPGameScene *scene = [TPGameScene nodeWithFileNamed:@"GameScene"];
     scene.scaleMode = SKSceneScaleModeAspectFill;
     
     // Present the scene.

@@ -9,7 +9,6 @@
 /* Begin PBXBuildFile section */
 		F68246071C3D73B1004F3575 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = F68246061C3D73B1004F3575 /* main.m */; };
 		F682460A1C3D73B1004F3575 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = F68246091C3D73B1004F3575 /* AppDelegate.m */; };
-		F682460D1C3D73B1004F3575 /* GameScene.m in Sources */ = {isa = PBXBuildFile; fileRef = F682460C1C3D73B1004F3575 /* GameScene.m */; };
 		F682460F1C3D73B1004F3575 /* GameScene.sks in Resources */ = {isa = PBXBuildFile; fileRef = F682460E1C3D73B1004F3575 /* GameScene.sks */; };
 		F68246121C3D73B1004F3575 /* GameViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = F68246111C3D73B1004F3575 /* GameViewController.m */; };
 		F68246151C3D73B1004F3575 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = F68246131C3D73B1004F3575 /* Main.storyboard */; };
@@ -17,6 +16,7 @@
 		F682461A1C3D73B1004F3575 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = F68246181C3D73B1004F3575 /* LaunchScreen.storyboard */; };
 		F68246251C3D73B1004F3575 /* Tappy_PlaneTests.m in Sources */ = {isa = PBXBuildFile; fileRef = F68246241C3D73B1004F3575 /* Tappy_PlaneTests.m */; };
 		F68246301C3D73B1004F3575 /* Tappy_PlaneUITests.m in Sources */ = {isa = PBXBuildFile; fileRef = F682462F1C3D73B1004F3575 /* Tappy_PlaneUITests.m */; };
+		F682463F1C3D748E004F3575 /* TPGameScene.m in Sources */ = {isa = PBXBuildFile; fileRef = F682463E1C3D748E004F3575 /* TPGameScene.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -41,8 +41,6 @@
 		F68246061C3D73B1004F3575 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
 		F68246081C3D73B1004F3575 /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
 		F68246091C3D73B1004F3575 /* AppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
-		F682460B1C3D73B1004F3575 /* GameScene.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = GameScene.h; sourceTree = "<group>"; };
-		F682460C1C3D73B1004F3575 /* GameScene.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = GameScene.m; sourceTree = "<group>"; };
 		F682460E1C3D73B1004F3575 /* GameScene.sks */ = {isa = PBXFileReference; lastKnownFileType = file.sks; path = GameScene.sks; sourceTree = "<group>"; };
 		F68246101C3D73B1004F3575 /* GameViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = GameViewController.h; sourceTree = "<group>"; };
 		F68246111C3D73B1004F3575 /* GameViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = GameViewController.m; sourceTree = "<group>"; };
@@ -56,6 +54,8 @@
 		F682462B1C3D73B1004F3575 /* Tappy PlaneUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "Tappy PlaneUITests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
 		F682462F1C3D73B1004F3575 /* Tappy_PlaneUITests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = Tappy_PlaneUITests.m; sourceTree = "<group>"; };
 		F68246311C3D73B1004F3575 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		F682463D1C3D748E004F3575 /* TPGameScene.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TPGameScene.h; sourceTree = "<group>"; };
+		F682463E1C3D748E004F3575 /* TPGameScene.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TPGameScene.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -108,9 +108,9 @@
 			children = (
 				F68246081C3D73B1004F3575 /* AppDelegate.h */,
 				F68246091C3D73B1004F3575 /* AppDelegate.m */,
-				F682460B1C3D73B1004F3575 /* GameScene.h */,
-				F682460C1C3D73B1004F3575 /* GameScene.m */,
 				F682460E1C3D73B1004F3575 /* GameScene.sks */,
+				F682463D1C3D748E004F3575 /* TPGameScene.h */,
+				F682463E1C3D748E004F3575 /* TPGameScene.m */,
 				F68246101C3D73B1004F3575 /* GameViewController.h */,
 				F68246111C3D73B1004F3575 /* GameViewController.m */,
 				F68246131C3D73B1004F3575 /* Main.storyboard */,
@@ -284,8 +284,8 @@
 			files = (
 				F68246121C3D73B1004F3575 /* GameViewController.m in Sources */,
 				F682460A1C3D73B1004F3575 /* AppDelegate.m in Sources */,
-				F682460D1C3D73B1004F3575 /* GameScene.m in Sources */,
 				F68246071C3D73B1004F3575 /* main.m in Sources */,
+				F682463F1C3D748E004F3575 /* TPGameScene.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
