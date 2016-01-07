@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		F60A5EAD1C3E2B3800FEC0D3 /* Planes.atlas in Resources */ = {isa = PBXBuildFile; fileRef = F60A5EAC1C3E2B3800FEC0D3 /* Planes.atlas */; };
+		F60A5EB01C3E2CF200FEC0D3 /* TPPlane.m in Sources */ = {isa = PBXBuildFile; fileRef = F60A5EAF1C3E2CF200FEC0D3 /* TPPlane.m */; };
 		F68246071C3D73B1004F3575 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = F68246061C3D73B1004F3575 /* main.m */; };
 		F682460A1C3D73B1004F3575 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = F68246091C3D73B1004F3575 /* AppDelegate.m */; };
 		F682460F1C3D73B1004F3575 /* GameScene.sks in Resources */ = {isa = PBXBuildFile; fileRef = F682460E1C3D73B1004F3575 /* GameScene.sks */; };
@@ -37,6 +39,9 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		F60A5EAC1C3E2B3800FEC0D3 /* Planes.atlas */ = {isa = PBXFileReference; lastKnownFileType = folder.skatlas; path = Planes.atlas; sourceTree = "<group>"; };
+		F60A5EAE1C3E2CF200FEC0D3 /* TPPlane.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TPPlane.h; sourceTree = "<group>"; };
+		F60A5EAF1C3E2CF200FEC0D3 /* TPPlane.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TPPlane.m; sourceTree = "<group>"; };
 		F68246021C3D73B1004F3575 /* Tappy Plane.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Tappy Plane.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		F68246061C3D73B1004F3575 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
 		F68246081C3D73B1004F3575 /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
@@ -106,11 +111,14 @@
 		F68246041C3D73B1004F3575 /* Tappy Plane */ = {
 			isa = PBXGroup;
 			children = (
+				F60A5EAC1C3E2B3800FEC0D3 /* Planes.atlas */,
 				F68246081C3D73B1004F3575 /* AppDelegate.h */,
 				F68246091C3D73B1004F3575 /* AppDelegate.m */,
 				F682460E1C3D73B1004F3575 /* GameScene.sks */,
 				F682463D1C3D748E004F3575 /* TPGameScene.h */,
 				F682463E1C3D748E004F3575 /* TPGameScene.m */,
+				F60A5EAE1C3E2CF200FEC0D3 /* TPPlane.h */,
+				F60A5EAF1C3E2CF200FEC0D3 /* TPPlane.m */,
 				F68246101C3D73B1004F3575 /* GameViewController.h */,
 				F68246111C3D73B1004F3575 /* GameViewController.m */,
 				F68246131C3D73B1004F3575 /* Main.storyboard */,
@@ -257,6 +265,7 @@
 				F682460F1C3D73B1004F3575 /* GameScene.sks in Resources */,
 				F682461A1C3D73B1004F3575 /* LaunchScreen.storyboard in Resources */,
 				F68246171C3D73B1004F3575 /* Assets.xcassets in Resources */,
+				F60A5EAD1C3E2B3800FEC0D3 /* Planes.atlas in Resources */,
 				F68246151C3D73B1004F3575 /* Main.storyboard in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -285,6 +294,7 @@
 				F68246121C3D73B1004F3575 /* GameViewController.m in Sources */,
 				F682460A1C3D73B1004F3575 /* AppDelegate.m in Sources */,
 				F68246071C3D73B1004F3575 /* main.m in Sources */,
+				F60A5EB01C3E2CF200FEC0D3 /* TPPlane.m in Sources */,
 				F682463F1C3D748E004F3575 /* TPGameScene.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -511,6 +521,7 @@
 				F68246361C3D73B1004F3575 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 		F68246371C3D73B1004F3575 /* Build configuration list for PBXNativeTarget "Tappy PlaneTests" */ = {
 			isa = XCConfigurationList;
@@ -519,6 +530,7 @@
 				F68246391C3D73B1004F3575 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 		F682463A1C3D73B1004F3575 /* Build configuration list for PBXNativeTarget "Tappy PlaneUITests" */ = {
 			isa = XCConfigurationList;
@@ -527,6 +539,7 @@
 				F682463C1C3D73B1004F3575 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};
