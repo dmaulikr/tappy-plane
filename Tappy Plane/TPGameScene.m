@@ -18,6 +18,12 @@
 
 @implementation TPGameScene
 
+
+-(void)didMoveToView:(SKView *)view {
+    // compatibility stuff with newer xcode crepas
+    self.size = view.bounds.size;
+}
+
 -(id)initWithSize:(CGSize)size {
     
     if (self = [super initWithSize:size]) {
@@ -34,6 +40,18 @@
     }
     
     return self;
+    
+}
+
+-(void)touchesBegan:(NSSet<UITouch *> *)touches withEvent:(UIEvent *)event {
+    /* Called when a touch begins */
+    
+    //for (UITouch *touch in touches) {
+        // alternate the engine on/off
+        self.player.engineRunning = !self.player.engineRunning;
+        // load new plane color
+        [self.player setRandomColor];
+    //}
     
 }
 

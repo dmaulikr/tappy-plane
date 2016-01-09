@@ -9,6 +9,7 @@
 /* Begin PBXBuildFile section */
 		F60A5EAD1C3E2B3800FEC0D3 /* Planes.atlas in Resources */ = {isa = PBXBuildFile; fileRef = F60A5EAC1C3E2B3800FEC0D3 /* Planes.atlas */; };
 		F60A5EB01C3E2CF200FEC0D3 /* TPPlane.m in Sources */ = {isa = PBXBuildFile; fileRef = F60A5EAF1C3E2CF200FEC0D3 /* TPPlane.m */; };
+		F60A5EB21C3E30F400FEC0D3 /* PlaneAnimations.plist in Resources */ = {isa = PBXBuildFile; fileRef = F60A5EB11C3E30F400FEC0D3 /* PlaneAnimations.plist */; };
 		F68246071C3D73B1004F3575 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = F68246061C3D73B1004F3575 /* main.m */; };
 		F682460A1C3D73B1004F3575 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = F68246091C3D73B1004F3575 /* AppDelegate.m */; };
 		F682460F1C3D73B1004F3575 /* GameScene.sks in Resources */ = {isa = PBXBuildFile; fileRef = F682460E1C3D73B1004F3575 /* GameScene.sks */; };
@@ -42,6 +43,7 @@
 		F60A5EAC1C3E2B3800FEC0D3 /* Planes.atlas */ = {isa = PBXFileReference; lastKnownFileType = folder.skatlas; path = Planes.atlas; sourceTree = "<group>"; };
 		F60A5EAE1C3E2CF200FEC0D3 /* TPPlane.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TPPlane.h; sourceTree = "<group>"; };
 		F60A5EAF1C3E2CF200FEC0D3 /* TPPlane.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TPPlane.m; sourceTree = "<group>"; };
+		F60A5EB11C3E30F400FEC0D3 /* PlaneAnimations.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = PlaneAnimations.plist; sourceTree = "<group>"; };
 		F68246021C3D73B1004F3575 /* Tappy Plane.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Tappy Plane.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		F68246061C3D73B1004F3575 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
 		F68246081C3D73B1004F3575 /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
@@ -88,6 +90,14 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		F60A5EB31C3E32A400FEC0D3 /* Resources */ = {
+			isa = PBXGroup;
+			children = (
+				F60A5EB11C3E30F400FEC0D3 /* PlaneAnimations.plist */,
+			);
+			name = Resources;
+			sourceTree = "<group>";
+		};
 		F68245F91C3D73B1004F3575 = {
 			isa = PBXGroup;
 			children = (
@@ -111,6 +121,7 @@
 		F68246041C3D73B1004F3575 /* Tappy Plane */ = {
 			isa = PBXGroup;
 			children = (
+				F60A5EB31C3E32A400FEC0D3 /* Resources */,
 				F60A5EAC1C3E2B3800FEC0D3 /* Planes.atlas */,
 				F68246081C3D73B1004F3575 /* AppDelegate.h */,
 				F68246091C3D73B1004F3575 /* AppDelegate.m */,
@@ -264,6 +275,7 @@
 			files = (
 				F682460F1C3D73B1004F3575 /* GameScene.sks in Resources */,
 				F682461A1C3D73B1004F3575 /* LaunchScreen.storyboard in Resources */,
+				F60A5EB21C3E30F400FEC0D3 /* PlaneAnimations.plist in Resources */,
 				F68246171C3D73B1004F3575 /* Assets.xcassets in Resources */,
 				F60A5EAD1C3E2B3800FEC0D3 /* Planes.atlas in Resources */,
 				F68246151C3D73B1004F3575 /* Main.storyboard in Resources */,
