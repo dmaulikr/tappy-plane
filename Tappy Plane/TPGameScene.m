@@ -28,6 +28,9 @@
     
     if (self = [super initWithSize:size]) {
         
+        // setup physics
+        self.physicsWorld.gravity = CGVectorMake(0.0, -5.5);
+        
         // setup world
         _world = [SKNode node];
         [self addChild:_world];
@@ -35,6 +38,8 @@
         // setup player
         _player = [[TPPlane alloc] init];
         _player.position = CGPointMake(self.size.width/2, self.size.height/2);
+        _player.physicsBody.affectedByGravity = NO;
+        _player.engineRunning = YES;
         [_world addChild:_player];
         
     }
@@ -46,13 +51,31 @@
 -(void)touchesBegan:(NSSet<UITouch *> *)touches withEvent:(UIEvent *)event {
     /* Called when a touch begins */
     
-    //for (UITouch *touch in touches) {
+    for (UITouch *touch in touches) {
+        /*
         // alternate the engine on/off
         self.player.engineRunning = !self.player.engineRunning;
         // load new plane color
         [self.player setRandomColor];
-    //} 
+         */
+        
+        self.player.accelerating = YES;
+        self.player.physicsBody.affectedByGravity = YES;
+    }
     
+}
+
+-(void)touchesEnded:(NSSet<UITouch *> *)touches withEvent:(UIEvent *)event {
+    
+    for (UITouch *touch in touches) {
+        self.player.accelerating = NO;
+    }
+    
+}
+
+// method to apply the force to the plane every frame
+-(void)update:(NSTimeInterval)currentTime {
+    [self.player update];
 }
 
 @end

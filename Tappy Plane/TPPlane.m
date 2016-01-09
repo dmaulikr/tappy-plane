@@ -13,6 +13,10 @@
 // hold animation actions
 @property (nonatomic) NSMutableArray *planeAnimations;
 
+// particle effects
+@property (nonatomic) SKEmitterNode *puffTrailEmitter;
+@property (nonatomic) CGFloat puffTrailBirthEmitter;
+
 @end
 
 
@@ -25,6 +29,10 @@ static NSString* const kKeyPlaneAnimation = @"PlaneAnimation";
     self = [super initWithImageNamed:@"planeBlue1"];
     
     if (self) {
+        
+        // set up a physics body
+        self.physicsBody = [SKPhysicsBody bodyWithCircleOfRadius:self.size.width/2];
+        self.physicsBody.mass = 0.07;
         
         // init array to hold animations
         _planeAnimations = [[NSMutableArray alloc] init];
@@ -42,6 +50,18 @@ static NSString* const kKeyPlaneAnimation = @"PlaneAnimation";
         
         }
         
+        // set up puff trail particle effect
+        NSString *particleFile = [[NSBundle mainBundle] pathForResource:@"PlanePuffTrail" ofType:@"sks"];
+        _puffTrailEmitter = [NSKeyedUnarchiver unarchiveObjectWithFile:particleFile];
+        _puffTrailEmitter.position = CGPointMake(-self.size.width+20.0, 0.0);
+        [self addChild:self.puffTrailEmitter];
+        // store the particle birth rate because we will use it later
+        self.puffTrailBirthEmitter = self.puffTrailEmitter.particleBirthRate;
+        // now set the particle birth rate of the emitter to 0
+        // because the plane will not be in movement in the beginning
+        self.puffTrailEmitter.particleBirthRate = 0;
+        
+        
         [self setRandomColor];
         
     }
@@ -58,8 +78,11 @@ static NSString* const kKeyPlaneAnimation = @"PlaneAnimation";
     
     if (engineRunning) {
         [self actionForKey:kKeyPlaneAnimation].speed = 1;
+        self.puffTrailEmitter.particleBirthRate = self.puffTrailBirthEmitter;
     } else {
         [self actionForKey:kKeyPlaneAnimation].speed = 0;
+        // turn off the smoke
+        self.puffTrailEmitter.particleBirthRate = 0;
     }
 }
 
@@ -110,6 +133,17 @@ static NSString* const kKeyPlaneAnimation = @"PlaneAnimation";
         self.engineRunning = NO;
         //[self actionForKey:kKeyPlaneAnimation].speed = 0;
     }
+}
+
+-(void)update {
+    
+    // are we accelerating? if so apply force to the physics body
+    if (self.accelerating) {
+        
+        [self.physicsBody applyForce:CGVectorMake(0.0, 100.0)];
+        
+    }
+    
 }
 
 @end
