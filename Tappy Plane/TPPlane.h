@@ -15,5 +15,7 @@
 
 -(void)setRandomColor;
 -(void)update;
+-(void)startFlyingAnimation;
+-(void)stopFlyingAnimation;
 
 @end

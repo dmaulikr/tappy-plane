@@ -20,7 +20,9 @@
 @end
 
 
+// animation constant variables
 static NSString* const kKeyPlaneAnimation = @"PlaneAnimation";
+static NSString* const kKeyFlyingAnimation = @"FlyingAnimation";
 
 
 @implementation TPPlane
@@ -61,6 +63,8 @@ static NSString* const kKeyPlaneAnimation = @"PlaneAnimation";
         // because the plane will not be in movement in the beginning
         self.puffTrailEmitter.particleBirthRate = 0;
         
+        // now set up the "flying" motion (up and down like flying)
+        
         
         [self setRandomColor];
         
@@ -84,6 +88,28 @@ static NSString* const kKeyPlaneAnimation = @"PlaneAnimation";
         // turn off the smoke
         self.puffTrailEmitter.particleBirthRate = 0;
     }
+}
+
+
+// ANIMATION METHODS
+
+
+// start the plane flying animation/motion
+-(void)startFlyingAnimation {
+    
+    // keep track of the original y point (the current starting point)
+    CGFloat yMovement = self.position.y;
+    // create a sequence of actions, one to move the plane up on the y-axis by 3 points
+    // and another to move the plane on the y-axis from the point it got to as mentioned
+    // above to the orinial y point before animation started minus 3 points
+    SKAction *rotateCannonAction = [SKAction sequence:@[[SKAction moveToY:self.position.y+3.0 duration:0.4],
+                                                        [SKAction moveToY:yMovement-3.0 duration:0.4]]];
+    [self runAction:[SKAction repeatActionForever:rotateCannonAction] withKey:kKeyFlyingAnimation];
+}
+
+// stop the flying animation, remove it
+-(void)stopFlyingAnimation {
+    [self removeActionForKey:kKeyFlyingAnimation];
 }
 
 

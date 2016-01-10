@@ -9,12 +9,14 @@
 #import "TPGameScene.h"
 #import "TPPlane.h"
 
+
 @interface TPGameScene ()
 
 @property (nonatomic) TPPlane *player;
 @property (nonatomic) SKNode *world;
 
 @end
+
 
 @implementation TPGameScene {
     CGPoint _touchLocation;
@@ -40,6 +42,19 @@
         _player.physicsBody.affectedByGravity = NO;
         _player.engineRunning = YES;
         [_world addChild:_player];
+        
+        // get the screensize
+        CGSize scr = self.scene.frame.size;
+        
+        // setup a position constraint for the plane
+        SKConstraint *planeBoundries = [SKConstraint
+                           positionX:[SKRange rangeWithLowerLimit:30.0 upperLimit:scr.width-30.0]
+                           Y:[SKRange rangeWithLowerLimit:25.0 upperLimit:scr.height-25.0]];
+        // ad the constraint to the plane
+        _player.constraints = @[planeBoundries];
+        
+        // start the flying animation
+        [_player startFlyingAnimation];
         
     }
     
@@ -71,12 +86,18 @@
     
     for (UITouch *touch in touches) {
         
+        // stop the flying animation because we will need a new y point from
+        // the finger movement
+        [_player stopFlyingAnimation];
+        
         // calculate how far touch has moved on x axis
         CGFloat xMovement = [touch locationInNode:self].x - _touchLocation.x;
         CGFloat yMovement = [touch locationInNode:self].y - _touchLocation.y;
         // move plane distance of touch
         _player.position = CGPointMake(_player.position.x + xMovement, _player.position.y + yMovement);
         
+        // restart the flying animation
+        [_player startFlyingAnimation];
         
         // reset the _touchLocation to keep track of new position
         _touchLocation = [touch locationInNode:self];
