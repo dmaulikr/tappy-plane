@@ -40,8 +40,10 @@
         _player = [[TPPlane alloc] init];
         _player.position = CGPointMake(self.size.width/2, self.size.height/2);
         _player.physicsBody.affectedByGravity = NO;
-        _player.engineRunning = YES;
         [_world addChild:_player];
+        // this setter uses settings that only exist AFTER the object
+        // has been added to a parent
+        _player.engineRunning = YES;
         
         // get the screensize
         CGSize scr = self.scene.frame.size;

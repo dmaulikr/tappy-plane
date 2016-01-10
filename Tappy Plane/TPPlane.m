@@ -83,6 +83,8 @@ static NSString* const kKeyFlyingAnimation = @"FlyingAnimation";
     if (engineRunning) {
         [self actionForKey:kKeyPlaneAnimation].speed = 1;
         self.puffTrailEmitter.particleBirthRate = self.puffTrailBirthEmitter;
+        // make the puff trail move with the plane in a more realistic manner
+        self.puffTrailEmitter.targetNode = self.parent;
     } else {
         [self actionForKey:kKeyPlaneAnimation].speed = 0;
         // turn off the smoke
