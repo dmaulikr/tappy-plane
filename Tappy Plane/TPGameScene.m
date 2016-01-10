@@ -16,7 +16,9 @@
 
 @end
 
-@implementation TPGameScene
+@implementation TPGameScene {
+    CGPoint _touchLocation;
+}
 
 
 -(void)didMoveToView:(SKView *)view {
@@ -27,9 +29,6 @@
 -(id)initWithSize:(CGSize)size {
     
     if (self = [super initWithSize:size]) {
-        
-        // setup physics
-        self.physicsWorld.gravity = CGVectorMake(0.0, -5.5);
         
         // setup world
         _world = [SKNode node];
@@ -52,15 +51,10 @@
     /* Called when a touch begins */
     
     for (UITouch *touch in touches) {
-        /*
-        // alternate the engine on/off
-        self.player.engineRunning = !self.player.engineRunning;
-        // load new plane color
-        [self.player setRandomColor];
-         */
-        
         self.player.accelerating = YES;
-        self.player.physicsBody.affectedByGravity = YES;
+        
+        // store the touch
+        _touchLocation = [touch locationInNode:self];
     }
     
 }
@@ -73,9 +67,27 @@
     
 }
 
+-(void)touchesMoved:(NSSet<UITouch *> *)touches withEvent:(UIEvent *)event {
+    
+    for (UITouch *touch in touches) {
+        
+        // calculate how far touch has moved on x axis
+        CGFloat xMovement = [touch locationInNode:self].x - _touchLocation.x;
+        CGFloat yMovement = [touch locationInNode:self].y - _touchLocation.y;
+        // move plane distance of touch
+        _player.position = CGPointMake(_player.position.x + xMovement, _player.position.y + yMovement);
+        
+        
+        // reset the _touchLocation to keep track of new position
+        _touchLocation = [touch locationInNode:self];
+        
+    }
+    
+}
+
 // method to apply the force to the plane every frame
 -(void)update:(NSTimeInterval)currentTime {
-    [self.player update];
+    //[self.player update];
 }
 
 @end

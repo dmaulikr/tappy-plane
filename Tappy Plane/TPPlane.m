@@ -32,7 +32,7 @@ static NSString* const kKeyPlaneAnimation = @"PlaneAnimation";
         
         // set up a physics body
         self.physicsBody = [SKPhysicsBody bodyWithCircleOfRadius:self.size.width/2];
-        self.physicsBody.mass = 0.07;
+        //self.physicsBody.mass = 0.07;
         
         // init array to hold animations
         _planeAnimations = [[NSMutableArray alloc] init];
