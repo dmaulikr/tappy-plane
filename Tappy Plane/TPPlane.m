@@ -73,12 +73,14 @@ static NSString* const kKeyPlaneAnimation = @"PlaneAnimation";
 // SETTER METHODS
 
 
+// set the engine running parameters
 -(void)setEngineRunning:(BOOL)engineRunning {
     _engineRunning = engineRunning;
     
     if (engineRunning) {
         [self actionForKey:kKeyPlaneAnimation].speed = 1;
         self.puffTrailEmitter.particleBirthRate = self.puffTrailBirthEmitter;
+        self.puffTrailEmitter.targetNode = self.parent;
     } else {
         [self actionForKey:kKeyPlaneAnimation].speed = 0;
         // turn off the smoke
