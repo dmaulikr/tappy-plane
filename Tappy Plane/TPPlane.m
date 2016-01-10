@@ -77,14 +77,19 @@ static NSString* const kKeyFlyingAnimation = @"FlyingAnimation";
 // SETTER METHODS
 
 
+// set the engine running parameters
 -(void)setEngineRunning:(BOOL)engineRunning {
     _engineRunning = engineRunning;
     
     if (engineRunning) {
         [self actionForKey:kKeyPlaneAnimation].speed = 1;
         self.puffTrailEmitter.particleBirthRate = self.puffTrailBirthEmitter;
+        
         // make the puff trail move with the plane in a more realistic manner
         self.puffTrailEmitter.targetNode = self.parent;
+        // need to set this because it will get drawn behind the background instead
+        self.puffTrailEmitter.particleZPosition = 2.0;
+        
     } else {
         [self actionForKey:kKeyPlaneAnimation].speed = 0;
         // turn off the smoke
@@ -121,7 +126,7 @@ static NSString* const kKeyFlyingAnimation = @"FlyingAnimation";
     NSMutableArray *frames = [[NSMutableArray alloc] init];
     
     // get planes atlas
-    SKTextureAtlas *planesAtlas = [SKTextureAtlas atlasNamed:@"Planes"];
+    SKTextureAtlas *planesAtlas = [SKTextureAtlas atlasNamed:@"Graphics"];
     
     // loop through textureNames array and load textures
     for (NSString *textureName in textureNames) {
@@ -164,14 +169,10 @@ static NSString* const kKeyFlyingAnimation = @"FlyingAnimation";
 }
 
 -(void)update {
-    
     // are we accelerating? if so apply force to the physics body
     if (self.accelerating) {
-        
         [self.physicsBody applyForce:CGVectorMake(0.0, 100.0)];
-        
     }
-    
 }
 
 @end

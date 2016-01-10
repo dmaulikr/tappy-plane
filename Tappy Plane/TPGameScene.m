@@ -8,17 +8,23 @@
 
 #import "TPGameScene.h"
 #import "TPPlane.h"
+#import "TPScrollingLayer.h"
 
 
 @interface TPGameScene ()
 
 @property (nonatomic) TPPlane *player;
 @property (nonatomic) SKNode *world;
+@property (nonatomic) TPScrollingLayer *background;
 
 @end
 
 
-@implementation TPGameScene {
+// dont drop below 10 frames per second when scrolling
+static const CGFloat kMinFPS = 10.0/60.0;
+
+
+@implementation TPGameScene{
     CGPoint _touchLocation;
 }
 
@@ -32,15 +38,46 @@
     
     if (self = [super initWithSize:size]) {
         
+        // ######################
+        // get atlas file
+        SKTextureAtlas *graphics = [SKTextureAtlas atlasNamed:@"Graphics"];
+        
+        
+        // ######################
+        // setup physics
+        self.physicsWorld.gravity = CGVectorMake(0.0, -5.5);
+        
+        
+        // ######################
         // setup world
         _world = [SKNode node];
         [self addChild:_world];
         
+        
+        // ######################
+        // set up the background layer first, add it to the world because we
+        // want all other layers to be on top of the background (addChild is a stack)
+        NSMutableArray *backgroundTiles = [[NSMutableArray alloc] init];
+        for (int i=0; i<3; i++) {
+            SKSpriteNode *tile = [SKSpriteNode spriteNodeWithTexture:[graphics textureNamed:@"background"]];
+            [backgroundTiles addObject:tile];
+        }
+        
+        // set up the scrolling layer
+        _background = [[TPScrollingLayer alloc] initWithTiles:backgroundTiles];
+        _background.position = CGPointMake(0.0, 70.0);
+        _background.horizontalScrollSpeed = -60;
+        _background.scrolling = YES;
+        [_world addChild:_background];
+        
+        
+        // ######################
         // setup player
         _player = [[TPPlane alloc] init];
         _player.position = CGPointMake(self.size.width/2, self.size.height/2);
         _player.physicsBody.affectedByGravity = NO;
         [_world addChild:_player];
+        
         // this setter uses settings that only exist AFTER the object
         // has been added to a parent
         _player.engineRunning = YES;
@@ -110,7 +147,19 @@
 
 // method to apply the force to the plane every frame
 -(void)update:(NSTimeInterval)currentTime {
+    
+    static NSTimeInterval lastCallTime;
+    NSTimeInterval timeElapsed = currentTime - lastCallTime;
+    
+    if (timeElapsed > kMinFPS) {
+        timeElapsed = kMinFPS;
+    }
+    
+    lastCallTime = currentTime;
+    
     //[self.player update];
+    [self.background updateWithTimeElapsed:timeElapsed];
+
 }
 
 @end
