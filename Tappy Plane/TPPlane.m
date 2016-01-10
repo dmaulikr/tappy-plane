@@ -81,6 +81,8 @@ static NSString* const kKeyPlaneAnimation = @"PlaneAnimation";
         [self actionForKey:kKeyPlaneAnimation].speed = 1;
         self.puffTrailEmitter.particleBirthRate = self.puffTrailBirthEmitter;
         self.puffTrailEmitter.targetNode = self.parent;
+        // need to set this because it will get drawn behind the background instead
+        self.puffTrailEmitter.particleZPosition = 2.0;
     } else {
         [self actionForKey:kKeyPlaneAnimation].speed = 0;
         // turn off the smoke
@@ -138,14 +140,10 @@ static NSString* const kKeyPlaneAnimation = @"PlaneAnimation";
 }
 
 -(void)update {
-    
     // are we accelerating? if so apply force to the physics body
     if (self.accelerating) {
-        
         [self.physicsBody applyForce:CGVectorMake(0.0, 100.0)];
-        
     }
-    
 }
 
 @end
