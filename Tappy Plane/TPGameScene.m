@@ -16,6 +16,7 @@
 @property (nonatomic) TPPlane *player;
 @property (nonatomic) SKNode *world;
 @property (nonatomic) TPScrollingLayer *background;
+@property (nonatomic) TPScrollingLayer *foreground;
 
 @end
 
@@ -32,7 +33,6 @@ static const CGFloat kMinFPS = 10.0/60.0;
 -(void)didMoveToView:(SKView *)view {
     // compatibility stuff with newer xcode crepas
     self.size = view.bounds.size;
-    self.backgroundColor = [SKColor colorWithRed:213.0/255.0 green:237.0/255.0 blue:247.0/255.0 alpha:1.0];
 }
 
 -(id)initWithSize:(CGSize)size {
@@ -40,6 +40,9 @@ static const CGFloat kMinFPS = 10.0/60.0;
     if (self = [super initWithSize:size]) {
         
         // ######################
+        // set the background color
+        self.backgroundColor = [SKColor colorWithRed:213.0/255.0 green:237.0/255.0 blue:247.0/255.0 alpha:1.0];
+        
         // get atlas file
         SKTextureAtlas *graphics = [SKTextureAtlas atlasNamed:@"Graphics"];
         
@@ -66,10 +69,23 @@ static const CGFloat kMinFPS = 10.0/60.0;
         
         // set up the scrolling layer
         _background = [[TPScrollingLayer alloc] initWithTiles:backgroundTiles];
-        _background.position = CGPointMake(0.0, 0.0);
+        //_background.position = CGPointZero;
+        _background.position = CGPointMake(0.0, 30.0);
         _background.horizontalScrollSpeed = -60;
         _background.scrolling = YES;
         [_world addChild:_background];
+        
+        
+        // ######################
+        // set up forground
+        NSArray *foregroundTiles = @[[self generateGroundtile],
+                                     [self generateGroundtile],
+                                     [self generateGroundtile]];
+        _foreground = [[TPScrollingLayer alloc] initWithTiles:foregroundTiles];
+        _foreground.position = CGPointZero;
+        _foreground.horizontalScrollSpeed = -80;
+        _foreground.scrolling = YES;
+        [_world addChild:_foreground];
         
         
         // ######################
@@ -99,6 +115,46 @@ static const CGFloat kMinFPS = 10.0/60.0;
     }
     
     return self;
+    
+}
+
+-(SKSpriteNode*)generateGroundtile {
+    
+    SKTextureAtlas *graphics = [SKTextureAtlas atlasNamed:@"Graphics"];
+    SKSpriteNode *sprite = [SKSpriteNode spriteNodeWithTexture:[graphics textureNamed:@"groundGrass"]];
+    
+    
+    // use http://insyncapp.net/SKPhysicsBodyPathGenerator.html
+    //SKPhysicsBody Path Generator
+    
+    // set the anchor point
+    sprite.anchorPoint = CGPointZero;
+    
+    CGFloat offsetX = sprite.frame.size.width * sprite.anchorPoint.x;
+    CGFloat offsetY = sprite.frame.size.height * sprite.anchorPoint.y;
+    
+    CGMutablePathRef path = CGPathCreateMutable();
+    
+    CGPathMoveToPoint(path, NULL, 403 - offsetX, 17 - offsetY);
+    CGPathAddLineToPoint(path, NULL, 369 - offsetX, 35 - offsetY);
+    CGPathAddLineToPoint(path, NULL, 329 - offsetX, 33 - offsetY);
+    CGPathAddLineToPoint(path, NULL, 286 - offsetX, 8 - offsetY);
+    CGPathAddLineToPoint(path, NULL, 235 - offsetX, 13 - offsetY);
+    CGPathAddLineToPoint(path, NULL, 203 - offsetX, 29 - offsetY);
+    CGPathAddLineToPoint(path, NULL, 166 - offsetX, 20 - offsetY);
+    CGPathAddLineToPoint(path, NULL, 124 - offsetX, 32 - offsetY);
+    CGPathAddLineToPoint(path, NULL, 79 - offsetX, 30 - offsetY);
+    CGPathAddLineToPoint(path, NULL, 44 - offsetX, 12 - offsetY);
+    CGPathAddLineToPoint(path, NULL, 1 - offsetX, 16 - offsetY);
+    
+    // not needed:
+    //CGPathCloseSubpath(path);
+    
+    // use bodyWithEdge instead:
+    //sprite.physicsBody = [SKPhysicsBody bodyWithPolygonFromPath:path];
+    sprite.physicsBody = [SKPhysicsBody bodyWithEdgeChainFromPath:path];
+    
+    return sprite;
     
 }
 
@@ -160,6 +216,7 @@ static const CGFloat kMinFPS = 10.0/60.0;
     
     //[self.player update];
     [self.background updateWithTimeElapsed:timeElapsed];
+    [self.foreground updateWithTimeElapsed:timeElapsed];
 
 }
 
