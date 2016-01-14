@@ -32,6 +32,7 @@ static const CGFloat kMinFPS = 10.0/60.0;
 -(void)didMoveToView:(SKView *)view {
     // compatibility stuff with newer xcode crepas
     self.size = view.bounds.size;
+    self.backgroundColor = [SKColor colorWithRed:213.0/255.0 green:237.0/255.0 blue:247.0/255.0 alpha:1.0];
 }
 
 -(id)initWithSize:(CGSize)size {
@@ -65,7 +66,7 @@ static const CGFloat kMinFPS = 10.0/60.0;
         
         // set up the scrolling layer
         _background = [[TPScrollingLayer alloc] initWithTiles:backgroundTiles];
-        _background.position = CGPointMake(0.0, 70.0);
+        _background.position = CGPointMake(0.0, 0.0);
         _background.horizontalScrollSpeed = -60;
         _background.scrolling = YES;
         [_world addChild:_background];
