@@ -56,7 +56,7 @@
             
             // find out where node coordinates are - are they out of view on the left?
             // take position of node that is in the coordinate system of self and give back
-            // as the thought that position were in the coordinate system of self.scene
+            // as though that position were in the coordinate system of self.scene
             // OR what is node's position in the coordinate system of self.scene
             CGPoint nodePositionInScene = [self convertPoint:node.position toNode:self.scene];
             
