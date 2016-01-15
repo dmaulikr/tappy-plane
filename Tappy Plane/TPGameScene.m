@@ -9,6 +9,7 @@
 #import "TPGameScene.h"
 #import "TPPlane.h"
 #import "TPScrollingLayer.h"
+#import "TPConstants.h"
 
 @interface TPGameScene ()
 
@@ -35,7 +36,7 @@ static const CGFloat kMinFPS = 10.0/60.0;
 -(id)initWithSize:(CGSize)size {
     
     if (self = [super initWithSize:size]) {
-        
+        NSLog(@"test");
         // set the background color
         self.backgroundColor = [SKColor colorWithRed:213.0/255.0 green:237.0/255.0 blue:247.0/255.0 alpha:1.0];
         
@@ -44,6 +45,7 @@ static const CGFloat kMinFPS = 10.0/60.0;
         
         // setup physics
         self.physicsWorld.gravity = CGVectorMake(0.0, -5.5);
+        self.physicsWorld.contactDelegate = self;
         
         // setup world
         _world = [SKNode node];
@@ -60,11 +62,8 @@ static const CGFloat kMinFPS = 10.0/60.0;
         
         // set up the scrolling layer
         _background = [[TPScrollingLayer alloc] initWithTiles:backgroundTiles];
-        //_background.position = CGPointZero;
-        _background.position = CGPointMake(0.0, 30.0);
         _background.horizontalScrollSpeed = -60;
         _background.scrolling = YES;
-        //_background.zPosition = 0.0;
         [_world addChild:_background];
         
         
@@ -73,7 +72,6 @@ static const CGFloat kMinFPS = 10.0/60.0;
                                      [self generateGroundtile],
                                      [self generateGroundtile]];
         _foreground = [[TPScrollingLayer alloc] initWithTiles:foregroundTiles];
-        _foreground.position = CGPointZero;
         _foreground.horizontalScrollSpeed = -80;
         _foreground.scrolling = YES;
         [_world addChild:_foreground];
@@ -82,15 +80,16 @@ static const CGFloat kMinFPS = 10.0/60.0;
         // setup player
         _player = [[TPPlane alloc] init];
         _player.position = CGPointMake(self.size.width/2, self.size.height/2);
-        _player.physicsBody.affectedByGravity = NO;
-        // setting engine running was here before:**
-        //_player.engineRunning = YES;
+        _player.physicsBody.categoryBitMask = kTPCategoryPlane;
         [_world addChild:_player];
-        // ** but since now we are updating the emitter targetNode to be the parent
+        // ** now we are updating the emitter targetNode to be the parent
         // we need to make sure that the plane has a parent first before we do that
         // that is why now we are starting engine after the plane object is added
         // to its parent
-        _player.engineRunning = YES;
+        //_player.engineRunning = YES;
+        
+        // new game/reset
+        [self newGame];
         
     }
     
@@ -98,15 +97,27 @@ static const CGFloat kMinFPS = 10.0/60.0;
     
 }
 
+-(void)newGame {
+    
+    // reset the layers
+    self.foreground.position = CGPointZero;
+    [self.foreground layoutTiles];
+    self.background.position = CGPointMake(0.0, 30.0);
+    [self.background layoutTiles];
+    
+    // reset the plane
+    [self.player reset];
+    self.player.position = CGPointMake(self.size.width/2, self.size.height/2);
+    self.player.physicsBody.affectedByGravity = NO;
+}
+
 -(SKSpriteNode*)generateGroundtile {
     
     SKTextureAtlas *graphics = [SKTextureAtlas atlasNamed:@"Graphics"];
     SKSpriteNode *sprite = [SKSpriteNode spriteNodeWithTexture:[graphics textureNamed:@"groundGrass"]];
     
-    
     // use http://insyncapp.net/SKPhysicsBodyPathGenerator.html
     //SKPhysicsBody Path Generator
-    
     
     sprite.anchorPoint = CGPointZero;
     
@@ -133,17 +144,41 @@ static const CGFloat kMinFPS = 10.0/60.0;
     // use bodyWithEdge instead:
     //sprite.physicsBody = [SKPhysicsBody bodyWithPolygonFromPath:path];
     sprite.physicsBody = [SKPhysicsBody bodyWithEdgeChainFromPath:path];
+    sprite.physicsBody.categoryBitMask = kTPCategoryGround;
+    
+    // do this for debugging the path only
+    //[sprite addChild:[self showDebugEdgeWithPath:path]];
     
     return sprite;
     
+}
+
+// method for testing out/debugging an edge's path
+-(SKShapeNode*)showDebugEdgeWithPath:(CGMutablePathRef)path {
+    // this code is VERY useful to view the path you have drawn
+    SKShapeNode *bodyShape = [SKShapeNode node];
+    bodyShape.path = path;
+    bodyShape.strokeColor = [SKColor colorWithRed:1.0 green:0.0 blue:0.0 alpha:0.5];
+    bodyShape.lineWidth = 3.0;
+    bodyShape.zPosition = 2.0;
+    return  bodyShape;
 }
 
 -(void)touchesBegan:(NSSet<UITouch *> *)touches withEvent:(UIEvent *)event {
     /* Called when a touch begins */
     
     for (UITouch *touch in touches) {
-        self.player.accelerating = YES;
-        self.player.physicsBody.affectedByGravity = YES;
+        
+        // if plane has hit the ground or object, reset the game
+        if (self.player.crashed) {
+            
+            [self newGame];
+            
+        } else {
+            self.player.accelerating = YES;
+            self.player.physicsBody.affectedByGravity = YES;
+        }
+        
     }
     
 }
@@ -152,6 +187,16 @@ static const CGFloat kMinFPS = 10.0/60.0;
     
     for (UITouch *touch in touches) {
         self.player.accelerating = NO;
+    }
+    
+}
+
+-(void)didBeginContact:(SKPhysicsContact *)contact {
+    
+    if (contact.bodyA.categoryBitMask == kTPCategoryPlane) {
+        [self.player collide:contact.bodyB];
+    } else if (contact.bodyB.categoryBitMask == kTPCategoryPlane) {
+        [self.player collide:contact.bodyA];
     }
     
 }
@@ -169,8 +214,11 @@ static const CGFloat kMinFPS = 10.0/60.0;
     lastCallTime = currentTime;
     
     [self.player update];
-    [self.background updateWithTimeElapsed:timeElapsed];
-    [self.foreground updateWithTimeElapsed:timeElapsed];
+    
+    if (!self.player.crashed) {
+        [self.background updateWithTimeElapsed:timeElapsed];
+        [self.foreground updateWithTimeElapsed:timeElapsed];
+    }
 }
 
 @end

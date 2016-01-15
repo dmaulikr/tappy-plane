@@ -7,6 +7,7 @@
 //
 
 #import "TPPlane.h"
+#import "TPConstants.h"
 
 @interface TPPlane()
 
@@ -30,16 +31,39 @@ static NSString* const kKeyPlaneAnimation = @"PlaneAnimation";
     
     if (self) {
         
-        // set up a physics body
-        self.physicsBody = [SKPhysicsBody bodyWithCircleOfRadius:self.size.width/2];
-        self.physicsBody.mass = 0.07;
+        // set up a physics body with path instead of circle of radius
+        //self.physicsBody = [SKPhysicsBody bodyWithCircleOfRadius:self.size.width/2];
+        
+        
+        CGFloat offsetX = self.frame.size.width * self.anchorPoint.x;
+        CGFloat offsetY = self.frame.size.height * self.anchorPoint.y;
+        
+        CGMutablePathRef path = CGPathCreateMutable();
+        
+        CGPathMoveToPoint(path, NULL, 43 - offsetX, 15 - offsetY);
+        CGPathAddLineToPoint(path, NULL, 35 - offsetX, 35 - offsetY);
+        CGPathAddLineToPoint(path, NULL, 11 - offsetX, 35 - offsetY);
+        CGPathAddLineToPoint(path, NULL, 0 - offsetX, 28 - offsetY);
+        CGPathAddLineToPoint(path, NULL, 10 - offsetX, 3 - offsetY);
+        CGPathAddLineToPoint(path, NULL, 30 - offsetX, 0 - offsetY);
+        CGPathAddLineToPoint(path, NULL, 40 - offsetX, 5 - offsetY);
+        
+        CGPathCloseSubpath(path);
+        
+        self.physicsBody = [SKPhysicsBody bodyWithPolygonFromPath:path];
+        self.physicsBody.mass = 0.08;
+        self.physicsBody.categoryBitMask = kTPCategoryPlane;
+        self.physicsBody.contactTestBitMask = kTPCategoryGround;
+        // the following makes the plane only collide with the ground
+        // commented out, not needed at the moment
+        //self.physicsBody.collisionBitMask = kTPCategoryGround;
         
         // init array to hold animations
         _planeAnimations = [[NSMutableArray alloc] init];
         
         // load animation plist file
-        NSString *path = [[NSBundle mainBundle] pathForResource:@"PlaneAnimations" ofType:@"plist"];
-        NSDictionary *animations = [NSDictionary dictionaryWithContentsOfFile:path];
+        NSString *animationPlistPath = [[NSBundle mainBundle] pathForResource:@"PlaneAnimations" ofType:@"plist"];
+        NSDictionary *animations = [NSDictionary dictionaryWithContentsOfFile:animationPlistPath];
         for (NSString *key in animations) {
             
             // get the animation from the array, passing it hte NSArray frames with a duration 0.4
@@ -75,7 +99,9 @@ static NSString* const kKeyPlaneAnimation = @"PlaneAnimation";
 
 // set the engine running parameters
 -(void)setEngineRunning:(BOOL)engineRunning {
-    _engineRunning = engineRunning;
+    
+    // if we have crashed engineRunning needs to be false
+    _engineRunning = engineRunning && !self.crashed;
     
     if (engineRunning) {
         [self actionForKey:kKeyPlaneAnimation].speed = 1;
@@ -89,6 +115,22 @@ static NSString* const kKeyPlaneAnimation = @"PlaneAnimation";
         self.puffTrailEmitter.particleBirthRate = 0;
     }
 }
+
+-(void)setAccelerating:(BOOL)accelerating {
+    _accelerating = accelerating && !self.crashed;
+}
+
+-(void)setCrashed:(BOOL)crashed {
+    _crashed = crashed;
+    
+    if (crashed) {
+        self.accelerating = NO;
+        self.engineRunning = NO;
+    }
+}
+
+
+// FUNCTIONAL METHODS
 
 
 -(SKAction*)animationFromArray:(NSArray*)textureNames withDuration:(CGFloat)duration {
@@ -144,6 +186,38 @@ static NSString* const kKeyPlaneAnimation = @"PlaneAnimation";
     if (self.accelerating) {
         [self.physicsBody applyForce:CGVectorMake(0.0, 100.0)];
     }
+    
+    // rotate the plane
+    if (!self.crashed) {
+        self.zRotation = fmaxf(fminf(self.physicsBody.velocity.dy, 400), -400) / 400;
+    }
+}
+
+-(void)collide:(SKPhysicsBody *)body {
+    
+    // ignore collisions if already crashed
+    if (!self.crashed) {
+        // hit the ground
+        if (body.categoryBitMask == kTPCategoryGround) {
+            self.crashed = YES;
+        }
+    }
+    
+}
+
+// reset the plane
+-(void)reset {
+    // reset plane
+    self.crashed = NO;
+    self.engineRunning = YES;
+    
+    // reset the plane rotation/velocity/etc
+    self.physicsBody.velocity = CGVectorMake(0.0, 0.0);
+    self.zRotation = 0.0;
+    self.physicsBody.angularVelocity = 0.0;
+    
+    // randomize the plane color
+    [self setRandomColor];
 }
 
 @end

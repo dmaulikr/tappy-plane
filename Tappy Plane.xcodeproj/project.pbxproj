@@ -12,6 +12,7 @@
 		F60A5EB21C3E30F400FEC0D3 /* PlaneAnimations.plist in Resources */ = {isa = PBXBuildFile; fileRef = F60A5EB11C3E30F400FEC0D3 /* PlaneAnimations.plist */; };
 		F613FA611C42DA67003F1F4D /* TPScrollingNode.m in Sources */ = {isa = PBXBuildFile; fileRef = F613FA601C42DA67003F1F4D /* TPScrollingNode.m */; };
 		F613FA641C42DDFA003F1F4D /* TPScrollingLayer.m in Sources */ = {isa = PBXBuildFile; fileRef = F613FA631C42DDFA003F1F4D /* TPScrollingLayer.m */; };
+		F613FAB91C477717003F1F4D /* TPConstants.m in Sources */ = {isa = PBXBuildFile; fileRef = F613FAB81C477717003F1F4D /* TPConstants.m */; };
 		F6158A3F1C4166180047B050 /* PlanePuffTrail.sks in Resources */ = {isa = PBXBuildFile; fileRef = F6158A3D1C4166180047B050 /* PlanePuffTrail.sks */; };
 		F6158A401C4166180047B050 /* spark.png in Resources */ = {isa = PBXBuildFile; fileRef = F6158A3E1C4166180047B050 /* spark.png */; };
 		F68246071C3D73B1004F3575 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = F68246061C3D73B1004F3575 /* main.m */; };
@@ -52,6 +53,8 @@
 		F613FA601C42DA67003F1F4D /* TPScrollingNode.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TPScrollingNode.m; sourceTree = "<group>"; };
 		F613FA621C42DDFA003F1F4D /* TPScrollingLayer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TPScrollingLayer.h; sourceTree = "<group>"; };
 		F613FA631C42DDFA003F1F4D /* TPScrollingLayer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TPScrollingLayer.m; sourceTree = "<group>"; };
+		F613FAB71C477717003F1F4D /* TPConstants.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TPConstants.h; sourceTree = "<group>"; };
+		F613FAB81C477717003F1F4D /* TPConstants.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TPConstants.m; sourceTree = "<group>"; };
 		F6158A3D1C4166180047B050 /* PlanePuffTrail.sks */ = {isa = PBXFileReference; lastKnownFileType = file.sks; path = PlanePuffTrail.sks; sourceTree = "<group>"; };
 		F6158A3E1C4166180047B050 /* spark.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = spark.png; sourceTree = "<group>"; };
 		F68246021C3D73B1004F3575 /* Tappy Plane.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Tappy Plane.app"; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -146,6 +149,8 @@
 				F68246081C3D73B1004F3575 /* AppDelegate.h */,
 				F68246091C3D73B1004F3575 /* AppDelegate.m */,
 				F682460E1C3D73B1004F3575 /* GameScene.sks */,
+				F613FAB71C477717003F1F4D /* TPConstants.h */,
+				F613FAB81C477717003F1F4D /* TPConstants.m */,
 				F682463D1C3D748E004F3575 /* TPGameScene.h */,
 				F682463E1C3D748E004F3575 /* TPGameScene.m */,
 				F60A5EAE1C3E2CF200FEC0D3 /* TPPlane.h */,
@@ -330,6 +335,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				F68246121C3D73B1004F3575 /* GameViewController.m in Sources */,
+				F613FAB91C477717003F1F4D /* TPConstants.m in Sources */,
 				F682460A1C3D73B1004F3575 /* AppDelegate.m in Sources */,
 				F68246071C3D73B1004F3575 /* main.m in Sources */,
 				F60A5EB01C3E2CF200FEC0D3 /* TPPlane.m in Sources */,

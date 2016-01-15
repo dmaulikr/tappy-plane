@@ -11,5 +11,6 @@
 @interface TPScrollingLayer : TPScrollingNode
 
 -(instancetype)initWithTiles:(NSArray*)tileSpriteNodes;
+-(void)layoutTiles;
 
 @end
