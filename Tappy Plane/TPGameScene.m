@@ -6,16 +6,18 @@
 //  Copyright © 2016 Chimi Coco. All rights reserved.
 //
 
+#import "TPConstants.h"
 #import "TPGameScene.h"
+#import "TPObstacleLayer.h"
 #import "TPPlane.h"
 #import "TPScrollingLayer.h"
-#import "TPConstants.h"
 
 @interface TPGameScene ()
 
 @property (nonatomic) TPPlane *player;
 @property (nonatomic) SKNode *world;
 @property (nonatomic) TPScrollingLayer *background;
+@property (nonatomic) TPObstacleLayer *obstacles;
 @property (nonatomic) TPScrollingLayer *foreground;
 
 @end
@@ -67,6 +69,9 @@ static const CGFloat kMinFPS = 10.0/60.0;
         [_world addChild:_background];
         
         
+        
+        
+        
         // set up forground
         NSArray *foregroundTiles = @[[self generateGroundtile],
                                      [self generateGroundtile],
@@ -75,6 +80,15 @@ static const CGFloat kMinFPS = 10.0/60.0;
         _foreground.horizontalScrollSpeed = -80;
         _foreground.scrolling = YES;
         [_world addChild:_foreground];
+        
+        
+        // set up obstacle layer
+        _obstacles = [[TPObstacleLayer alloc] init];
+        _obstacles.horizontalScrollSpeed = -80;
+        _obstacles.scrolling = YES;
+        _obstacles.floor = 0.0;
+        _obstacles.ceiling = self.size.height;
+        [_world addChild:_obstacles];
         
         
         // setup player
@@ -102,6 +116,8 @@ static const CGFloat kMinFPS = 10.0/60.0;
     // reset the layers
     self.foreground.position = CGPointZero;
     [self.foreground layoutTiles];
+    self.obstacles.position = CGPointZero;
+    [self.obstacles reset];
     self.background.position = CGPointMake(0.0, 30.0);
     [self.background layoutTiles];
     
@@ -218,6 +234,7 @@ static const CGFloat kMinFPS = 10.0/60.0;
     if (!self.player.crashed) {
         [self.background updateWithTimeElapsed:timeElapsed];
         [self.foreground updateWithTimeElapsed:timeElapsed];
+        [self.obstacles updateWithTimeElapsed:timeElapsed];
     }
 }
 
