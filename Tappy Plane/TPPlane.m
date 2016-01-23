@@ -7,6 +7,7 @@
 //
 
 #import "TPPlane.h"
+#import "TPConstants.h"
 
 @interface TPPlane()
 
@@ -33,15 +34,37 @@ static NSString* const kKeyFlyingAnimation = @"FlyingAnimation";
     if (self) {
         
         // set up a physics body
-        self.physicsBody = [SKPhysicsBody bodyWithCircleOfRadius:self.size.width/2];
         //self.physicsBody.mass = 0.07;
+        // set up a physics body with path instead of circle of radius
+        //self.physicsBody = [SKPhysicsBody bodyWithCircleOfRadius:self.size.width/2];
+        
+        
+        CGFloat offsetX = self.frame.size.width * self.anchorPoint.x;
+        CGFloat offsetY = self.frame.size.height * self.anchorPoint.y;
+        
+        CGMutablePathRef path = CGPathCreateMutable();
+        
+        CGPathMoveToPoint(path, NULL, 43 - offsetX, 15 - offsetY);
+        CGPathAddLineToPoint(path, NULL, 35 - offsetX, 35 - offsetY);
+        CGPathAddLineToPoint(path, NULL, 11 - offsetX, 35 - offsetY);
+        CGPathAddLineToPoint(path, NULL, 0 - offsetX, 28 - offsetY);
+        CGPathAddLineToPoint(path, NULL, 10 - offsetX, 3 - offsetY);
+        CGPathAddLineToPoint(path, NULL, 30 - offsetX, 0 - offsetY);
+        CGPathAddLineToPoint(path, NULL, 40 - offsetX, 5 - offsetY);
+        
+        CGPathCloseSubpath(path);
+        
+        self.physicsBody = [SKPhysicsBody bodyWithPolygonFromPath:path];
+        self.physicsBody.mass = 0.08;
+        self.physicsBody.categoryBitMask = kTPCategoryPlane;
+        self.physicsBody.contactTestBitMask = kTPCategoryGround;
         
         // init array to hold animations
         _planeAnimations = [[NSMutableArray alloc] init];
         
         // load animation plist file
-        NSString *path = [[NSBundle mainBundle] pathForResource:@"PlaneAnimations" ofType:@"plist"];
-        NSDictionary *animations = [NSDictionary dictionaryWithContentsOfFile:path];
+        NSString *animationPlistPath = [[NSBundle mainBundle] pathForResource:@"PlaneAnimations" ofType:@"plist"];
+        NSDictionary *animations = [NSDictionary dictionaryWithContentsOfFile:animationPlistPath];
         for (NSString *key in animations) {
             
             // get the animation from the array, passing it hte NSArray frames with a duration 0.4
@@ -65,7 +88,6 @@ static NSString* const kKeyFlyingAnimation = @"FlyingAnimation";
         
         // now set up the "flying" motion (up and down like flying)
         
-        
         [self setRandomColor];
         
     }
@@ -79,7 +101,9 @@ static NSString* const kKeyFlyingAnimation = @"FlyingAnimation";
 
 // set the engine running parameters
 -(void)setEngineRunning:(BOOL)engineRunning {
-    _engineRunning = engineRunning;
+    
+    // if we have crashed engineRunning needs to be false
+    _engineRunning = engineRunning && !self.crashed;
     
     if (engineRunning) {
         [self actionForKey:kKeyPlaneAnimation].speed = 1;
@@ -97,6 +121,23 @@ static NSString* const kKeyFlyingAnimation = @"FlyingAnimation";
     }
 }
 
+-(void)setAccelerating:(BOOL)accelerating {
+    _accelerating = accelerating && !self.crashed;
+}
+
+-(void)setCrashed:(BOOL)crashed {
+    _crashed = crashed;
+    
+    if (crashed) {
+        self.accelerating = NO;
+        self.engineRunning = NO;
+        [self stopFlyingAnimation];
+    }
+}
+
+
+// FUNCTIONAL METHODS
+
 
 // ANIMATION METHODS
 
@@ -109,9 +150,9 @@ static NSString* const kKeyFlyingAnimation = @"FlyingAnimation";
     // create a sequence of actions, one to move the plane up on the y-axis by 3 points
     // and another to move the plane on the y-axis from the point it got to as mentioned
     // above to the orinial y point before animation started minus 3 points
-    SKAction *rotateCannonAction = [SKAction sequence:@[[SKAction moveToY:self.position.y+3.0 duration:0.4],
+    SKAction *upDownMovementAction = [SKAction sequence:@[[SKAction moveToY:self.position.y+3.0 duration:0.4],
                                                         [SKAction moveToY:yMovement-3.0 duration:0.4]]];
-    [self runAction:[SKAction repeatActionForever:rotateCannonAction] withKey:kKeyFlyingAnimation];
+    [self runAction:[SKAction repeatActionForever:upDownMovementAction] withKey:kKeyFlyingAnimation];
 }
 
 // stop the flying animation, remove it
@@ -164,7 +205,6 @@ static NSString* const kKeyFlyingAnimation = @"FlyingAnimation";
     // we want to stop the animation when the new random color plane is loaded
     if (!self.engineRunning) {
         self.engineRunning = NO;
-        //[self actionForKey:kKeyPlaneAnimation].speed = 0;
     }
 }
 
@@ -173,6 +213,40 @@ static NSString* const kKeyFlyingAnimation = @"FlyingAnimation";
     if (self.accelerating) {
         [self.physicsBody applyForce:CGVectorMake(0.0, 100.0)];
     }
+    
+    // rotate the plane
+    if (!self.crashed) {
+        self.zRotation = fmaxf(fminf(self.physicsBody.velocity.dy, 400), -400) / 400;
+    }
+}
+
+-(void)collide:(SKPhysicsBody *)body {
+    
+    // ignore collisions if already crashed
+    if (!self.crashed) {
+        // hit the ground
+        if (body.categoryBitMask == kTPCategoryGround) {
+            self.crashed = YES;
+        }
+    }
+    
+}
+
+// reset the plane
+-(void)reset {
+    // reset plane
+    self.crashed = NO;
+    self.engineRunning = YES;
+    
+    // reset the plane rotation/velocity/etc
+    self.physicsBody.velocity = CGVectorMake(0.0, 0.0);
+    self.zRotation = 0.0;
+    self.physicsBody.angularVelocity = 0.0;
+    
+    [self startFlyingAnimation];
+    
+    // randomize the plane color
+    //[self setRandomColor];
 }
 
 @end

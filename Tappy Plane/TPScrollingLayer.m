@@ -30,7 +30,7 @@
             
         }
         
-        [self layoutTiles];
+        //[self layoutTiles];
         
     }
     
